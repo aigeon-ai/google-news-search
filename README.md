@@ -2,52 +2,47 @@
 
 ## Project Description
 
-Aigeon AI Google News Search is a Python-based server application designed to interface with the SerpApi to perform comprehensive searches on Google News. The application leverages the FastMCP framework to provide a structured and efficient way to query Google News, offering a variety of parameters to customize search results according to user needs.
+Aigeon AI Google News Search is a Python-based server application designed to interact with the Google News search engine via the SerpApi. This application allows users to perform comprehensive searches on Google News, utilizing various parameters to refine and customize the search results. The server is built using the FastMCP framework, providing a robust and efficient platform for handling search requests.
 
 ## Features Overview
 
-- **Flexible Query Parameters**: Allows users to define search queries using a variety of parameters such as country, language, topic, publication, and more.
-- **Sorting and Caching Options**: Supports sorting results by relevance or date and provides options to use cached results or force fresh searches.
-- **Asynchronous Search Capability**: Offers the ability to perform searches asynchronously, enabling users to submit queries and retrieve results at a later time.
-- **Enterprise Features**: Includes advanced options like ZeroTrace mode for enhanced privacy and data management.
+- **Google News Search Integration**: Seamlessly integrates with Google News through the SerpApi, enabling detailed and customizable news searches.
+- **Flexible Query Parameters**: Supports a wide range of parameters to refine search results, including country, language, topic, publication, and more.
+- **Advanced Search Options**: Offers options for sorting, caching, and asynchronous search execution.
+- **Enterprise Features**: Includes an enterprise-only ZeroTrace mode for enhanced privacy and security.
 
 ## Main Features and Functionality
 
-1. **Search Customization**: 
-   - Users can specify search queries (`q`) similar to a regular Google News search.
-   - Country (`gl`) and language (`hl`) parameters allow localization of search results.
-   - Topic, publication, section, and story tokens provide targeted search capabilities for specific news categories or sources.
+The core functionality of this application revolves around the `search_google_news` function, which is exposed as a tool via the FastMCP server. This function allows users to perform detailed searches on Google News by specifying various parameters. The application constructs a search query using these parameters and sends a request to the SerpApi, returning the search results in JSON format.
 
-2. **Search Management**:
-   - The `so` parameter allows sorting of search results by relevance or date.
-   - The `no_cache` parameter controls whether to use cached results or fetch new data.
-   - The `async` parameter enables asynchronous search submission, useful for handling large or complex queries.
+### Main Functions Description
 
-3. **Enterprise-Level Privacy**:
-   - The `zero_trace` parameter, available for enterprise users, ensures that search parameters and metadata are not stored, enhancing privacy and security.
+#### `search_google_news`
 
-## Main Function Description
+This function is the primary interface for performing Google News searches. It accepts several parameters that allow users to customize their search queries:
 
-### `search_google_news`
+- **q**: A string parameter defining the query for the Google News search. It can include any terms or operators used in a regular Google News search. This parameter cannot be used with `publication_token`, `story_token`, or `topic_token`.
 
-This function serves as the core utility for performing Google News searches through the SerpApi. It accepts a variety of parameters to tailor the search experience:
+- **gl**: A two-letter country code specifying the country for the search (e.g., `us` for the United States, `uk` for the United Kingdom).
 
-- **Parameters**:
-  - `q`: Defines the search query.
-  - `gl`: Specifies the country code for localization.
-  - `hl`: Specifies the language code for localization.
-  - `topic_token`: Targets specific news topics.
-  - `publication_token`: Filters results by specific publishers.
-  - `section_token`: Accesses subsections within a topic.
-  - `story_token`: Provides full coverage of specific stories.
-  - `so`: Determines sorting method (by relevance or date).
-  - `no_cache`: Controls caching behavior.
-  - `async`: Enables asynchronous search processing.
-  - `zero_trace`: Activates enhanced privacy mode.
+- **hl**: A two-letter language code specifying the language for the search (e.g., `en` for English, `es` for Spanish).
 
-- **Functionality**:
-  - Constructs a payload with the specified parameters, omitting any that are `None`.
-  - Sends a GET request to the SerpApi endpoint with the constructed payload.
-  - Processes the response and returns the JSON data for further use.
+- **topic_token**: A token used to access news results for a specific topic (e.g., 'World', 'Business'). It cannot be used with `q`, `story_token`, or `publication_token`.
 
-This function is designed to provide a robust and flexible interface for accessing Google News data, catering to a wide range of search needs and preferences.
+- **publication_token**: A token used to access news results from a specific publisher (e.g., 'CNN', 'BBC'). It cannot be used with `q`, `story_token`, or `topic_token`.
+
+- **section_token**: A token for accessing a subsection of a specific topic. It can only be used with `topic_token` or `publication_token`.
+
+- **story_token**: A token for accessing news results with full coverage of a specific story. It cannot be used with `q`, `topic_token`, or `publication_token`.
+
+- **so**: An integer parameter for sorting results. Supported values are `0` for relevance and `1` for date. It can only be used with `story_token`.
+
+- **no_cache**: A boolean parameter to force fetching fresh results from SerpApi, bypassing any cached versions.
+
+- **aasync**: A boolean parameter to submit the search asynchronously, allowing results to be retrieved later.
+
+- **zero_trace**: An enterprise-only boolean parameter to enable ZeroTrace mode, which enhances privacy by not storing search parameters or metadata.
+
+The function constructs a payload with the specified parameters, filters out any `None` values, and sends a GET request to the SerpApi endpoint. The response is returned in JSON format, providing comprehensive news results based on the search criteria.
+
+This application is designed to provide a powerful and flexible tool for accessing Google News data, making it suitable for various use cases, including news aggregation, research, and analysis.
